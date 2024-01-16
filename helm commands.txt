@@ -1,0 +1,41 @@
+# helm by default nfinx ki image create krta hai...
+
+# helm create nginx-chart (isse hamara ek nginx ka chart ban jayega)
+
+# helm package nginx-chart (It is use to create the chart)
+
+# helm install nginx-chart ./nginx-chart (isse hamara nginx ka deployment aur service sab ban jata hai)
+
+TO CECK THIS....
+
+# kubectl get all (To check ki kam kr rha hai ya nhi)
+
+Agar humse kuch code me glti ho gya toh hum chart to uninstall kr dege)
+
+# helm uninstall nginx-chart (To uninstall the nginx chart)
+
+Ab hum check kr lege ki uninstall hua ki nhi....
+# kubectl get all 
+
+Agar humne kuch code me change kiya toh hum chart ko bapas se package krege aur phir install krege...
+# helm package nginx-chart
+# helm install nginx-chart ./nginx-chart
+
+# kubectl get pods -w (To see the pods)
+
+*** Ab na ek error aa skta hai ki hamara pods run show krega but run nhi hoga to solve that error***
+Jab hum templete bnata hai toh hamare templete me bohut saari cheeze aise hoti hai jo hamare kam ki nhi hoti.
+
+# vim nginx-chart/templates/deployment.yaml 
+Is file me ek livenessProbe aur readinessProbe hota hai ye dono na health check ki api hoti hai toh kisi me inki jarurat hoti hai aur kisi me nhi toh like agar hum mysql ka chart banta hai toh isne iski jarurat nhi hoti.
+Toh jisme bhi error aaye ki container running nhi ho rha hai toh hum...INN DONO (linenessProbe aur readinessProbe) KO HUM COMMENT KR DEGE.
+
+# helm list (To see the helm list )
+
+In Simple to deploy the chart we have to you two mail commands...
+# helm package nginx-chart
+# helm install nginx-chart ./nginx-chart
+# kubectl get all (To see ki chart deploy hua ki nhi )
+
+
+

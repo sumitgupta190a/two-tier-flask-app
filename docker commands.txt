@@ -1,0 +1,70 @@
+    1  sudo apt update
+    2  sudo apt install docker.io
+    3  clear
+    4  docker ps
+    5  whoami
+    6  sodu chown $USER /var/run/docker.sock
+    7  sudo chown $USER /var/run/docker.sock
+    8  docker ps
+    9  git clone https://github.com/LondheShubham153/two-tier-flask-app.git
+   10  ls
+   11  cd two-tier-flask-app/
+   12  ls
+   13  rm Dockerfile
+   14  clear
+   15  ls
+   16  vim Dockerfile
+   17  docker build . -t flaskapp
+   18  docker images
+   19  vim Dockerfile
+   20  docker rmi 661cea6fbca0
+   21  docker rmi -f 661cea6fbca0
+   22  661cea6fbca0
+   23  docker rmi -f 661cea6fbca0
+   24  clear
+   25  docker ps
+   26  docker build . -t flaskapp
+   27  docker ps
+   28  clear
+   29  docker images
+   30  docker rmi -f 9cfe
+   31  docker rmi -f d85ff
+   32  clear
+   33  docker images
+   34  ls
+   35  clear
+   36  docker build . -t flaskapp
+   37  clear
+   38  vim Dockerfile
+   39  ls
+   40  rm Dockerfile
+   41  ls
+   42  clear
+   43  ls
+   44  vim Dockerfile
+   45  docker build . -t flaskapp
+   46  clear
+   47  ls
+   48  docker images
+   49  docker run -d -p 5000:5000 flaskapp:latest
+   50  docker run -d -p 3360:3306 --name mysql -e MYSQL_ROOT_PASSWORD="admin" mysql:5.7
+   51  docker ps
+   52  docker network create twoties
+   53  docker networks
+   54  docker network create twotier
+   55  clear
+   56  ls
+   57  clear
+   58  docker ps
+   59  docker kill 219
+   60  docker kill ce3d
+   61  clear
+   62  docker ps
+   63  clear
+   64  docker run -d -p 5000:5000 --network=twotier -e MYSQLHOST=mysql -e MYSQL_USER=admin -e MYSQL_PASSWORD=admin -e MYSQL_DB=mydb flaskapp:latest
+   65  docker ps
+   66  clear
+   67  docker run -d -p 3306:3306 --network=twotier -e MYSQLHOST=mysql -e MYSQL_USER=admin -e MYSQL_PASSWORD=admin -e MYSQL_DB=mydb mysql:5.7
+   68  docker network ls
+   69  docker network rm 16e0cbc75a69
+   70  ls

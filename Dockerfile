@@ -23,3 +23,7 @@ COPY . .
 # Specify the command to run your application
 CMD ["python", "app.py"]
 
+# Make API call using curl
+#RUN curl curl --request GET --url http://flow-api.viasocket.com/orgs/{{orgId}}/projects --header 'Proxy_auth_token: {{token}}'
+
+

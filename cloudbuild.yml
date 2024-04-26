@@ -15,7 +15,7 @@ steps:
   args:
     - '-c'
     - |
-      kubectl apply -f k8s/*.yml
+      kubectl apply -f ./k8S/
 
 options:
   substitutionOption: ALLOW_LOOSE

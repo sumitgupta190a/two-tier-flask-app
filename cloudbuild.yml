@@ -1,20 +1,21 @@
 steps:
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/two-tier-app-image:$COMMIT_SHA', '.']
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/two-tier-app-image:$COMMIT_SHA']
-  - name: 'gcr.io/cloud-builders/gcloud'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        gcloud container clusters get-credentials sumit-cluster \
-          --zone=asia-south1-c
-  - name: 'gcr.io/cloud-builders/kubectl'
-    args:
-      - 'apply'
-      - '-f'
-      - 'k8s/'  # Use the directory instead of a wildcard for multiple files
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/two-tier-app-image:$COMMIT_SHA', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/$PROJECT_ID/two-tier-app-image:$COMMIT_SHA']
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      gcloud container clusters get-credentials sumit-cluster \
+        --zone=asia-south1-c
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      kubectl apply -f k8s/*.yml
 
 options:
   substitutionOption: ALLOW_LOOSE
@@ -30,7 +31,8 @@ substitutions:
   _COMMIT_SHA: $COMMIT_SHA
 
 tags:
-  - cicd
+- cicd
+
 
 
 

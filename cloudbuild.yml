@@ -1,15 +1,27 @@
 steps:
-# Build the Docker image
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/$PROJECT_ID/$IMAGE_NAME:$COMMIT_SHA', '.']
-
-# Push the Docker image to Google Container Registry
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/two-tier-app-image:$COMMIT_SHA', '.']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/$PROJECT_ID/$IMAGE_NAME:$COMMIT_SHA']
-
-# Update the Kubernetes deployment with the new image
+  args: ['push', 'gcr.io/$PROJECT_ID/two-tier-app-image:$COMMIT_SHA']
 - name: 'gcr.io/cloud-builders/kubectl'
-  args: ['apply', '-f', 'k8s/']
+  args:
+  - 'apply'
+  - '-f'
+  - 'k8s/'
+options:
+  substitutionOption: ALLOW_LOOSE
+  logging: CLOUD_LOGGING_ONLY
+  logsBucket: sumit-logs
+substitutions:
+  _DEPLOYMENT_NAME: two-tier-app-deployment
+  _CONTAINER_NAME: two-tier-app-pod
+  _SERVICE_NAME: two-tier-app-service
+  _AR_HOSTNAME: asia-docker.pkg.dev
+  _AR_NAME: sumit-gcp-practice
+  _COMMIT_SHA: $COMMIT_SHA
+tags:
+  - cicd
+
 
 
 # # Define variables

@@ -11,16 +11,17 @@ steps:
 options:
   substitutionOption: ALLOW_LOOSE
   logging: CLOUD_LOGGING_ONLY
-  logsBucket: sumit-logs
+  logStreamingOption: STREAM_ON
 substitutions:
   _DEPLOYMENT_NAME: two-tier-app-deployment
   _CONTAINER_NAME: two-tier-app-pod
-  _SERVICE_NAME: two-tier-app-service
+  _SERVICE_NAME: twotier-app-service
   _AR_HOSTNAME: asia-docker.pkg.dev
   _AR_NAME: sumit-gcp-practice
   _COMMIT_SHA: $COMMIT_SHA
 tags:
   - cicd
+
 
 
 

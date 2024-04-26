@@ -14,8 +14,8 @@ steps:
     args:
       - 'apply'
       - '-f'
-      - 'k8s/*.yaml'  # Path to your Kubernetes manifest files
-  
+      - 'k8s/'  # Use the directory instead of a wildcard for multiple files
+
 options:
   substitutionOption: ALLOW_LOOSE
   logging: CLOUD_LOGGING_ONLY
@@ -31,6 +31,7 @@ substitutions:
 
 tags:
   - cicd
+
 
 
 

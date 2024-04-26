@@ -3,11 +3,21 @@ steps:
   args: ['build', '-t', 'gcr.io/$PROJECT_ID/two-tier-app-image:$COMMIT_SHA', '.']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/$PROJECT_ID/two-tier-app-image:$COMMIT_SHA']
-- name: 'gcr.io/cloud-builders/kubectl'
-  args:
-  - 'apply'
-  - '-f'
-  - 'k8s/'
+  
+- name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gcloud container clusters get-credentials sumit-cluster \
+          --region=aisa-south1-c
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args:
+      - 'apply'
+      - '-f'
+      - 'k8s/*.yaml'  # Path to your Kubernetes manifest file
+
+  
 options:
   substitutionOption: ALLOW_LOOSE
   logging: CLOUD_LOGGING_ONLY

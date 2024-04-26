@@ -1,0 +1,19 @@
+# Define variables
+options:
+  env:
+    - IMAGE_NAME: "twotier-app-image"
+    - DEPLOYMENT_NAME: "two-tier-app-deployment"
+    - CONTAINER_NAME: "two-tier-app-pod"
+
+steps:
+# Build the Docker image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/$IMAGE_NAME:$COMMIT_SHA', '.']
+
+# Push the Docker image to Google Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/$PROJECT_ID/$IMAGE_NAME:$COMMIT_SHA']
+
+# Update the Kubernetes deployment with the new image
+- name: 'gcr.io/cloud-builders/kubectl'
+  args: ['set', 'image', 'deployment/$DEPLOYMENT_NAME', '$CONTAINER_NAME=gcr.io/$PROJECT_ID/$IMAGE_NAME:$COMMIT_SHA']

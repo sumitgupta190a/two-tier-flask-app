@@ -25,6 +25,13 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/$PROJECT_ID/two-tier-app-image']
 
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      kubectl apply -f ./k8s/
+
 # Step 5: Set the image in the Kubernetes deployment
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'

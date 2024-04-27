@@ -1,15 +1,32 @@
 steps:
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/$PROJECT_ID/two-tier-app-image:$COMMIT_SHA', '.']
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/$PROJECT_ID/two-tier-app-image:$COMMIT_SHA']
+
+# Step 1: Authenticate Docker with Google Container Registry
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
   args:
-    - '-c'
-    - |
-      gcloud container clusters get-credentials sumit-cluster \
-        --zone=asia-south1-c
+  - '-c'
+  - |
+    echo Y | gcloud auth configure-docker gcr.io
+
+# Step 2: Set up the Kubernetes cluster context
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    gcloud container clusters get-credentials sumit-cluster --zone asia-south1-c --project sumit-gcp-practice &&
+    kubectl version
+
+# Step 3: Build the Docker image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/two-tier-app-image', '.']
+
+# Step 4: Push the Docker image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/$PROJECT_ID/two-tier-app-image']
+
+
+# Step 5: Apply
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
   args:
@@ -17,21 +34,52 @@ steps:
     - |
       kubectl apply -f ./k8s/
 
-options:
-  substitutionOption: ALLOW_LOOSE
-  logging: CLOUD_LOGGING_ONLY
-  logStreamingOption: STREAM_ON
+# Step 6: Set the image in the Kubernetes deployment
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    kubectl set image deployment/two-tier-app-deployment two-tier-app=gcr.io/$PROJECT_ID/two-tier-app-image:$COMMIT_SHA
 
-substitutions:
-  _DEPLOYMENT_NAME: two-tier-app-deployment
-  _CONTAINER_NAME: two-tier-app-pod
-  _SERVICE_NAME: twotier-app-service
-  _AR_HOSTNAME: asia-docker.pkg.dev
-  _AR_NAME: sumit-gcp-practice
-  _COMMIT_SHA: $COMMIT_SHA
 
-tags:
-- cicd
+
+
+
+# steps:
+# - name: 'gcr.io/cloud-builders/docker'
+#   args: ['build', '-t', 'gcr.io/$PROJECT_ID/two-tier-app-image:$COMMIT_SHA', '.']
+# - name: 'gcr.io/cloud-builders/docker'
+#   args: ['push', 'gcr.io/$PROJECT_ID/two-tier-app-image:$COMMIT_SHA']
+# - name: 'gcr.io/cloud-builders/gcloud'
+#   entrypoint: 'bash'
+#   args:
+#     - '-c'
+#     - |
+#       gcloud container clusters get-credentials sumit-cluster \
+#         --zone=asia-south1-c
+# - name: 'gcr.io/cloud-builders/gcloud'
+#   entrypoint: 'bash'
+#   args:
+#     - '-c'
+#     - |
+#       kubectl apply -f ./k8s/
+
+# options:
+#   substitutionOption: ALLOW_LOOSE
+#   logging: CLOUD_LOGGING_ONLY
+#   logStreamingOption: STREAM_ON
+
+# substitutions:
+#   _DEPLOYMENT_NAME: two-tier-app-deployment
+#   _CONTAINER_NAME: two-tier-app-pod
+#   _SERVICE_NAME: twotier-app-service
+#   _AR_HOSTNAME: asia-docker.pkg.dev
+#   _AR_NAME: sumit-gcp-practice
+#   _COMMIT_SHA: $COMMIT_SHA
+
+# tags:
+# - cicd
 
 
 
